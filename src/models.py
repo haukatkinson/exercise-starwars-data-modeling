@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -8,26 +8,68 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
 
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
+class People(Base):
+    __tablename__ = "people"
+    name = Column(String(256))
+    height = Column(Float)
+    mass = Column(String(256))
+    hair_color = Column(String(256))
+    skin_color = Column(String(256))
+    eye_color = Column(String(256))
+    birth_year = Column(String(256))
+    gender = Column(String(256))
+    homeworld = Column(String(256))
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+
+
+class Planets(Base):
+    __tablename__ = "planets"
+    name = Column(String(256))
+    rotation_period = Column(Integer)
+    orbital_period = Column(Integer)
+    diameter = Column(Integer)
+    climate = Column(String(256))
+    gravity = Column(Integer)
+    terrain = Column(String(256))
+    surface_water = Column(Integer)
+    population = Column(Integer)
+    id = Column(Integer, primary_key=True)
+
+
+class Starships(Base):
+    __tablename__ = "starships"
+    name = Column(String(256))
+    model = Column(String(256))
+    manufacturer = Column(String(256))
+    cost_in_credits = Column(Integer)
+    length = Column(Integer)
+    max_atmosphering_speed = Column(Integer)
+    passengers = Column(Integer)
+    cargo_capacity = Column(Integer)
+    id = Column(Integer, primary_key=True)
+
+
+class User(Base):
+    __tablename__ = "user"
+    username = Column(String(256))
+    firstname = Column(String(256))
+    lastname = Column(String(256))
+    email = Column(String(256))
+    favorites = relationship("favorites")
+    id = Column(Integer, primary_key=True)
+
+
+class Favorites(Base):
+    __tablename__ = "favorites"
+    planet = Column(String(256))
+    people = Column(String(256))
+    user_id = Column(Integer, ForeignKey("user.id"))
+    id = Column(Integer, primary_key=True)
 
     def to_dict(self):
         return {}
 
-## Draw from SQLAlchemy base
+
+# Draw from SQLAlchemy base
 render_er(Base, 'diagram.png')
